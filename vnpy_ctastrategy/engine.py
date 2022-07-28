@@ -1,4 +1,5 @@
 import importlib
+import os
 import traceback
 from collections import defaultdict
 from pathlib import Path
@@ -798,6 +799,11 @@ class CtaEngine(BaseEngine):
 
         path2: Path = Path.cwd().joinpath("strategies")
         self.load_strategy_class_from_folder(path2, "strategies")
+
+        env_dir: str | None = os.getenv("CTA_STRATEGIES_DIR")
+        if env_dir:
+            path3: Path = Path(env_dir)
+            self.load_strategy_class_from_folder(path3, path3.stem)
 
     def load_strategy_class_from_folder(self, path: Path, module_name: str = "") -> None:
         """
